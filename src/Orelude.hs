@@ -31,6 +31,9 @@ module Orelude
     , Orelude.maximumBy
     , Orelude.minimum
     , Orelude.minimumBy
+    , Orelude.concat
+    , Orelude.mconcat
+    , Orelude.concatMap
     , Orelude.read
     -- Lifted variants
     , (Orelude.++)
@@ -63,10 +66,12 @@ import           Control.Monad.IO.Class
 import           Control.Monad.Reader   hiding (forM_, mapM_, msum, sequence_)
 import           Control.Monad.State    hiding (forM_, mapM_, msum, sequence_)
 import           Control.Monad.Trans
-import           Control.Monad.Writer   hiding (forM_, mapM_, msum, sequence_)
+import           Control.Monad.Writer   hiding (forM_, mapM_, mconcat, msum,
+                                         sequence_)
 import           Data.Either
-import           Data.Foldable          hiding (foldl1, foldr1, forM_, mapM_,
-                                         maximum, maximumBy, minimum, minimumBy,
+import           Data.Foldable          hiding (concat, concatMap, foldl1,
+                                         foldr1, forM_, mapM_, maximum,
+                                         maximumBy, minimum, minimumBy,
                                          msum, sequence_)
 import           Data.Function          hiding (id, (.))
 import           Data.Functor
@@ -76,13 +81,14 @@ import           Data.List              hiding (foldl1, foldl1', foldr1, head,
                                          (!!), (++))
 import           Data.Maybe
 import           Data.Traversable
-import           Prelude                hiding (appendFile, foldl1, foldr1,
-                                         getChar, getContents, getLine, head,
-                                         id, init, interact, last, length, map,
-                                         mapM_, maximum, minimum, print,
-                                         putChar, putStr, putStrLn, read,
-                                         readFile, readIO, readLn, sequence_,
-                                         tail, writeFile, (!!), (++), (.))
+import           Prelude                hiding (appendFile, concat, concatMap,
+                                         foldl1, foldr1, getChar, getContents,
+                                         getLine, head, id, init, interact,
+                                         last, length, map, mapM_, maximum,
+                                         mconcat, minimum, print, putChar,
+                                         putStr, putStrLn, read, readFile,
+                                         readIO, readLn, sequence_, tail,
+                                         writeFile, (!!), (++), (.))
 import qualified Prelude                as P
 import           Text.Read              (readMaybe)
 
@@ -192,6 +198,18 @@ minimumBy :: (Foldable t, MonadThrow m) => (a -> a -> Ordering) -> t a -> m a
 minimumBy f = foldr1 g >>> liftMaybe "minimumBy: empty structure"
     where g a b = case f a b of GT -> b
                                 _  -> a
+
+-- |Equivalent to fold.
+concat :: (Foldable t, Monoid m) => t m -> m
+concat = fold
+
+-- |Equivalent to fold.
+mconcat :: (Foldable t, Monoid m) => t m -> m
+mconcat = fold
+
+-- |Equivalent to foldMap.
+concatMap :: (Foldable t, Monoid m) => (a -> m) -> t a -> m
+concatMap = foldMap
 
 -- |A lifted variant of putChar.
 putChar :: MonadIO m => Char -> m ()
