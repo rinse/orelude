@@ -8,7 +8,6 @@ copyright:           "2020 rinse"
 
 extra-source-files:
 - .gitignore
-- .hlint.yaml
 - LICENSE
 - README.md
 - package.yaml
@@ -29,23 +28,51 @@ ghc-options:
 - -Wincomplete-record-updates
 - -Wincomplete-uni-patterns
 - -Wredundant-constraints
+- -XBangPatterns
+- -XBinaryLiterals
+- -XConstraintKinds
+- -XDataKinds
+- -XDefaultSignatures
+- -XDeriveDataTypeable
+- -XDeriveFoldable
+- -XDeriveFunctor
+- -XDeriveGeneric
+- -XDeriveTraversable
+- -XDoAndIfThenElse
+- -XEmptyDataDecls
+- -XExistentialQuantification
+- -XFlexibleContexts
+- -XFlexibleInstances
+- -XFunctionalDependencies
+- -XGADTs
+- -XGeneralizedNewtypeDeriving
+- -XInstanceSigs
+- -XKindSignatures
+- -XLambdaCase
+- -XMultiParamTypeClasses
+- -XMultiWayIf
+- -XNamedFieldPuns
+- -XNoImplicitPrelude
+- -XOverloadedStrings
+- -XPartialTypeSignatures
+- -XPatternGuards
+- -XPolyKinds
+- -XRankNTypes
+- -XRecordWildCards
+- -XScopedTypeVariables
+- -XStandaloneDeriving
+- -XTupleSections
+- -XTypeFamilies
+- -XTypeSynonymInstances
+- -XViewPatterns
 
 dependencies:
 - base >= 4.7 && < 5
+- mtl >= 2.0 && < 3
+- safe-exceptions >= 0.1.7 && < 0.2
 
 library:
   source-dirs: src
-
-executables:
-  orelude-exe:
-    main:                Main.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - orelude
 
 tests:
   orelude-test:
@@ -66,6 +93,7 @@ tests:
     - -threaded
     - -rtsopts
     - -with-rtsopts=-N
+    - -XImplicitPrelude
     dependencies:
     - orelude
     - doctest >= 0.16
